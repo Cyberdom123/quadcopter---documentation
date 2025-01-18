@@ -1,0 +1,108 @@
+\documentclass[12pt]{article}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+% Language and encoding
+\newcommand{\dumblang}[2]{{#2}}
+%\usepackage{\dumblang{polski}{english}}
+%\usepackage{[\dumblang{polish}{english}]{babel}}
+\usepackage[ \dumblang{polish}{english} ]{babel}
+\usepackage[utf8]{inputenc}
+
+% Formatting
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{anyfontsize}
+
+% Math
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{extpfeil}
+
+
+% Table of contents
+\usepackage{blindtext}
+\usepackage{titlesec}
+
+% Other Stuff
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{comment}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage[export]{adjustbox}[2011/08/13]
+
+% Add manual tabulator 
+\usepackage{tabto}
+
+%
+%\usepackage[draft,nosingleletter]{impnattypo}
+
+% Plot
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+% Rysunki rysuneczki:
+\usepackage[european, american currents, americanvoltages, RPvoltages, cute inductor]{circuitikz} % rysowanie schematów <- super dokumentacje
+\usepackage{tikz} % <- rysunki ogólne ale dokumentacja do dupy
+\usepackage{pdfpages}
+
+% \usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\newunicodechar{²}{\ensuremath{{}^2}}
+
+
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = black
+}
+
+\titleformat{\section}
+{\Large \bfseries}
+{\thesection.}
+{0.5em}
+{}[\titlerule]
+
+\titleformat{\subsection}
+{\large \bfseries}
+{\thesubsection.}
+{0.5em}
+{}[]
+
+\newtheorem{thm}{Twierdzenie}
+\DeclareMathOperator\sinc{sinc}
+\DeclareMathOperator\sgn{sgn}
+\DeclareMathOperator{\kron}{d}
+
+
+
+\newcommand{\xrlh}{\xrightleftharpoons}
+\newcommand{\FT}{\xrightleftharpoons[ICFT]{CFT} }
+\newcommand{\unit}{\operatorname{u}}
+\newcommand{\LT}{\xrightleftharpoons[\mathcal{L}^{-1}]{\mathcal{L}}}
+\newcommand{\ZZ}{\mathcal{Z}}
+
+% Włącz numerację w sposób NumerSekcji.NumerRównania
+\numberwithin{equation}{section}
+
+% \DeclareMathOperator{\FT}{\xrightleftharpoons[\text{ICFT}]{\text{CFT}}}
+% dwujęzyczność
+
+\title{\textbf{Quadcopter} \\ \dumblang{Dokumentacja projektu}{Project documentation}}
+\author{Dominik Michalczyk, Kacper Filipek}
+\date{\dumblang{Styczeń}{January} 2024}
+
+\begin{document}
+
+\maketitle
+
+
+\input{tex/opis}
+\input{tex/anal}
+\input{tex/real}
+\input{tex/schemat_blok}
+\input{tex/kod}
+%\input{tex/schemat_ele}
+
+\end{document}

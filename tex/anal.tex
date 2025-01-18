@@ -1,0 +1,11 @@
+\section{\dumblang{Analiza problemu}{Problem analysis}}
+
+\dumblang{Aby quadcopter działał stabilnie należy w sposób ciągły mierzyć odczyty z sensorów, dokonać estymacji kątów pod jakimi znajduje się dron aby móc dokonać potrzebnej korekty i wysterować silniki w taki sposób, żeby zredukować wszelkie niepożądane odchylenia od zadanej przez użytkownika wartości.}\
+{For the quadcopter to be stable, it needs to continuously measure the sensor data and estimate its attitute angles and correct to the set position and drive the motors in a way that reduces deviations from the user-set attitude.}
+
+\dumblang{Do odczytu zmierzonych danych z sensora należy odczytywać dane z konkretnych rejestrów układu MPU6050. Lokalizacje oraz opisy wszystkich rejestrów opisane są szczegółówo w dokumentacji układu. Należy napisać bibliotekę do obsługi sensora.}\ 
+{Reading the sensor data is done by reading from specific registers of MPU6050. Adresses and descriptions of all registers are written in detail in the datasheet of the IC. A library for using IC must be written.}
+
+\dumblang{Aby móc nim sterować, dron musi mieć na pokładzie układ bezprzewodowy służący do sterowania nim podczas lotu. Moduł nRF24 pozwala na cyfrową komunikację radiową na częstotliwości 2.4GHz.}\
+{In order to control the drone, it needs to have a wireless communication circuit aboard. The nRF24 module allows for digital radio communication on 2.4GHz band.}
+%W celu łatwego i intuicyjnego odczytu danych z sensorów z poziomu kodu, została napisana biblioteka do inicjalizacji i obsługi MPU6050. Wykorzystuje ona wbudowany w mikroprocesor interfejs szeregowy I$^2$C, przez który odbywa się komunikacja między układami. Transmisja po magistrali odbywa się z częstotliwością 400kHz.https://www.overleaf.com/project/65a8209c251d1b5813c7b400

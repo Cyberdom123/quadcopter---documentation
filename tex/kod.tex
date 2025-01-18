@@ -1,0 +1,90 @@
+\section{\dumblang{Opis programu}{Code description}}
+
+\dumblang
+% Polish version
+{
+
+
+}
+% English version
+{
+\subsection{nrf24l01 library}
+\begin{itemize}
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Init(NRF24L01\_STRUCT *nrf24l01, \\
+    NRF24L01\_CONFIG *nrf24l01\_cfg); }\\
+    - Initializes the 2.4Ghz module and sets the default setting
+    
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Enable\_ACKN\_Payload(NRF24L01 \\ *nrf24l01); } \\
+    - Enables acknowledge payloads support. Thanks to it, you can immediately send a message to 
+    the radio that previously transmitted the data.
+    
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Open\_Reading\_Pipe(NRF24L01\_STRUCT *nrf24l01, uint8\_t pipeAddr, uint64\_t rxAddr, uint8\_t payloadSize);}\\
+    - Opens a pipe through which messages from the transmitter will be received.
+
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Get\_Info(NRF24L01\_STRUCT *nrf24l01);} \\
+    - Reads all nrf24l01 status registers, used for debugging.
+    
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Read\_PayloadDMA(NRF24L01\_STRUCT \\ *nrf24l01, uint8\_t len);} \\
+    - Reads the payload sent by the transmitter using SPI in combination with the DMA (direct memory access controller).
+    
+    \item \texttt{void NRF24L01\_Read\_PayloadDMA\_Complete(NRF24L01\_STRUCT \\ 
+    *nrf24l01, uint8\_t *data, uint8\_t len);}\\
+    - After receiving data from the radio using DMA, it saves it to the given buffer.
+    
+    \item \texttt{HAL\_StatusTypeDef NRF24L01\_Write\_ACKN\_Payload(NRF24L01\_STRUCT \\
+    *nrf24l01, void *data, uint8\_t len);}\\
+    - Saves data that will be sent after receiving the next message from the transmitter.
+
+    \item  \texttt{HAL\_StatusTypeDef NRF24L01\_Start\_Listening(NRF24L01\_STRUCT *nrf24l01);} \\
+    - Starts listening for incoming packets and enables interrupts from nrf24l01.
+
+    \item  \texttt{void NRF24L01\_Stop\_Listening(NRF24L01\_STRUCT *nrf24l01)}
+    - Stops listening for incoming packets and disables interrupts from nrf24l01.
+\end{itemize} 
+\subsection{rc library}
+\begin{itemize}
+    \item \texttt{void RC\_Receive\_Message(uint8\_t message[8], RC\_t *rc)} \\
+    - Turns the received message into a control structure that is used to control the quadcopter
+\end{itemize}
+\subsection{angle\_estimation library}
+    \begin{itemize}
+    \item \texttt{void Estimate\_Angles\_Init(float dt, float alpha, float tau)}\\
+    - Initialize Angle estimator: dt - sampling time, alpha - coefficient for complementary filter, tau - coefficient for accelerometer low\-pass filters, $\tau = \frac{1}{2 \pi f}$.
+    \item  \texttt{void Estimate\_Angles(float angles[2], float angular\_velocities[3], \\
+    float acc\_buf[3], float gyro\_buff[3])} \\
+    - Calculates angles using trigonometry of acceleration vectors and transforms body frame to fixed frame using Euler rotation matrix. Finally, it combines these two readings using Kalman Filters or Complementary filters and thus estimates the angles at which the drone is located.
+    \end{itemize}
+}
+\subsection{stabilizer library}
+    \begin{itemize}
+        \item \texttt{void Stabilizer\_init()} \\
+        - Sets all PIDs and filters needed to stabilize the quadcopter.
+        \item \texttt{void Stabilize(float angles[2], float angular\_velocities[3], \\
+        int8\_t control\_inputs[4])} \\
+        - Stabilizes the drone's movement using PID controllers.
+    \end{itemize}
+
+\subsection{motors library}
+    \begin{itemize}
+        \item \texttt{void Motors\_SetPWR(uint8\_t thrust, int8\_t yaw, int8\_t pitch, int8\_t roll)} \\
+        - Using the Motor Mixing Algorithm sets the pwm of all four motors.
+        \item  \texttt{void Motors\_Switch(uint8\_t power\_on)} \\
+        - Turns the motors on and off.
+    \end{itemize}
+
+\subsection{MPU6050 library}
+    \begin{itemize}
+        \item \texttt{MPU6050\_STRUCT} - a structure tpye containing the I$^2$C address of MPU6050 and addresses of buffers for the data being read.
+        \item \texttt{MPU6050\_config} - structure type for MPU configuration
+        \item \texttt{MPU6050\_config MPU\_get\_default\_cfg(void)} - returns the default configuration for MPU
+        \item \texttt{HAL\_StatusTypeDef MPU\_init(MPU6050\_STRUCT *mpu, MPU6050\_config* cfg)} - initialises the MPU according to the config passed as argument. 
+        \item \texttt{HAL\_StatusTypeDef MPU\_measure\_gyro\_offset(MPU6050\_STRUCT* mpu, uint16\_t samples} - measures the constant offset of the gyroscope based on set sample number.
+        \item \texttt{HAL\_StatusTypeDef MPU\_measure\_acc\_offset(MPU6050\_STRUCT* mpu, uint16\_t samples)} - measures the constant offset of the accelerometer.
+        \item \texttt{HAL\_StatusTypeDef MPU\_clear\_int(MPU6050\_STRUCT *mpu)} - clears the interrup flag from MPU's interrupt status register.
+        %\item \texttt{HAL_StatusTypeDef MPU_read_acc(MPU6050_STRUCT *mpu, FLOAT_TYPE output[])} - reads the accelerometer output to the \texttt{output[]}
+        %\item \texttt{HAL_StatusTypeDef MPU_read_gyro(MPU6050_STRUCT *mpu, FLOAT_TYPE output[])} - reads the gyroscope output to the \texttt{output[]}
+        \item \texttt{HAL\_StatusTypeDef MPU\_read\_acc\_gyro\_DMA(MPU6050\_STRUCT *mpu)} - reads accelerometer and gyroscope data using DMA to a memory location passed using the config struct.
+        \item \texttt{HAL\_StatusTypeDef MPU\_read\_acc\_gyro\_DMA\_complete(MPU6050\_STRUCT *mpu)} - calculates the sensor values from raw bytes after the readout has been completed.
+    \end{itemize}
+
+    Note that the functions for measuring the offsets write the result to a static variable defined in the library source file. The functions for reading the measurements of the IMU substract the offsets automatically.
